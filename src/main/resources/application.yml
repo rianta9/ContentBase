@@ -1,0 +1,32 @@
+# ===============================
+# SERVER PORT
+# ===============================
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+spring:
+# ===============================
+# SERVLET CONFIG
+# ===============================
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+# ===============================
+# DATASOURCE CONFIG
+# ===============================
+  datasource:
+# ===============================
+# SQL SERVER
+# ===============================
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://localhost:1433;databaseName=N9
+#    username: sa
+#    password: 123456
+# ===============================
+# POSTGRESQL
+# ===============================
+    url: jdbc:postgresql://localhost:5432/contentbase?currentSchema=public
+    username: postgres
+    password: Abcd1234
