@@ -1,7 +1,6 @@
 package com.ryanlab.contentbase.model.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import com.ryanlab.contentbase.model.dto.request.ContentCreationRequest;
@@ -19,7 +18,6 @@ public interface ContentMapper {
   // @Mapping(source = "id.value", target = "id")
   CreateContentResponse toCreateContentResponse(Content input);
 
-  @Mapping(source = "id.value", target = "id")
   ContentResponse toContentResponse(Content input);
 
 }

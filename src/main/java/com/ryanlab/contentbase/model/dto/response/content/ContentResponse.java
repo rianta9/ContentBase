@@ -23,4 +23,8 @@ public class ContentResponse {
   LocalDate dateCreated;
   @JsonProperty
   String content;
+  @JsonProperty
+  String categoryId;
+  @JsonProperty
+  String categoryName;
 }

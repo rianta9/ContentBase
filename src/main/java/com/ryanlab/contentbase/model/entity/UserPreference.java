@@ -2,6 +2,8 @@ package com.ryanlab.contentbase.model.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.lang.NonNull;
+
 import com.ryanlab.contentbase.core.entity.CoreEntity;
 
 import jakarta.persistence.Column;
@@ -16,15 +18,13 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Content extends CoreEntity<Content> {
+public class UserPreference extends CoreEntity<UserPreference> {
   /**
    * 
    */
-  static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @Column
-  String title;
-  @Column
-  String content;
+  String username;
   @Column
   String categoryId;
   @Column
@@ -32,37 +32,34 @@ public class Content extends CoreEntity<Content> {
   @Column
   String updatedBy;
   @Column
-  LocalDateTime createdDate;
+  LocalDateTime createdAt;
   @Column
-  LocalDateTime updatedDate;
+  LocalDateTime updatedAt;
 
   @Builder
-  public Content(
-    String title, String content, String categoryId, String createdBy,
-    String updatedBy,
-    LocalDateTime createdDate, LocalDateTime updatedDate) {
+  public UserPreference(
+    @NonNull String username, @NonNull String categoryId,
+    String createdBy, String updatedBy,
+    LocalDateTime createdAt, LocalDateTime updatedAt) {
     super();
-    this.title = title;
-    this.content = content;
+    this.username = username;
     this.categoryId = categoryId;
     this.createdBy = createdBy;
     this.updatedBy = updatedBy;
-    this.createdDate = createdDate;
-    this.updatedDate = updatedDate;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   @Builder
-  public Content(
-    String id, String title, String content, String categoryId,
-    String createdBy, String updatedBy,
-    LocalDateTime createdDate, LocalDateTime updatedDate) {
+  public UserPreference(
+    @NonNull String id, @NonNull String username, @NonNull String categoryId,
+    String createdBy,  String updatedBy, LocalDateTime createdAt, LocalDateTime updatedAt) {
     super(id);
-    this.title = title;
-    this.content = content;
+    this.username = username;
     this.categoryId = categoryId;
     this.createdBy = createdBy;
     this.updatedBy = updatedBy;
-    this.createdDate = createdDate;
-    this.updatedDate = updatedDate;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

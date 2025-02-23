@@ -8,6 +8,13 @@ import com.ryanlab.contentbase.model.entity.Account;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-  @Mapping(source = "id.value", target = "userId")
+
+/**
+ * Maps an Account entity to an AccountInfoResponse DTO.
+ *
+ * @param input the Account entity to be mapped
+ * @return the mapped AccountInfoResponse DTO
+ */
+  @Mapping(source = "id", target = "userId")
   AccountInfoResponse toAccountInfoResponse(Account input);
 }
