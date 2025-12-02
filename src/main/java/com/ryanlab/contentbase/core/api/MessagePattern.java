@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
-@Accessors(fluent = true)
 @Data
 @Value
 @Builder(toBuilder = true)

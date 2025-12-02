@@ -1,0 +1,137 @@
+1. Giới thiệu
+Mục tiêu dự án:
+Xây dựng một hệ thống quản lý nội dung (content) với các tính năng hiển thị tin tức, truyện, blog cho người dùng chưa đăng nhập; đồng thời cung cấp các chức năng đăng nhập như yêu thích, bình luận, cá nhân hóa nội dung theo sở thích. Hệ thống cũng bao gồm một giao diện admin cho việc quản lý nội dung, duyệt bài và thống kê. Đây sẽ là nền tảng cơ sở để phát triển các hệ thống content khác trong tương lai.
+
+Phạm vi hệ thống:
+
+Backend: Sử dụng Spring Boot, cung cấp RESTful API.
+Cơ sở dữ liệu: PostgreSQL.
+Caching: Redis cho việc lưu trữ tạm thời các nội dung, tìm kiếm và thống kê.
+Bảo mật: Sử dụng Spring Security, JWT (có cơ chế refresh token) và mã hoá mật khẩu (BCrypt hoặc Argon2).
+Các module chức năng: Quản lý người dùng, content, bình luận, và quản lý hệ thống qua giao diện admin.
+2. Kiến trúc tổng thể
+2.1 Kiến trúc phân tầng
+Controller: Xử lý các request/response từ phía client.
+Service: Chứa logic nghiệp vụ, xử lý các tác vụ phức tạp, tương tác giữa controller và repository.
+Repository: Giao tiếp với cơ sở dữ liệu, thực hiện các thao tác CRUD qua Spring Data JPA.
+Model/Entity & DTO: Định nghĩa các đối tượng dữ liệu, sử dụng Lombok để giảm boilerplate code.
+Security: Cấu hình Spring Security, JWT, và các filter cần thiết.
+Config: Các cấu hình chung như database, cache, logging, …
+2.2 Kiến trúc Module và Môi trường triển khai
+Module người dùng (User Module):
+
+Quản lý đăng ký, đăng nhập, refresh token, cập nhật hồ sơ người dùng.
+Lưu trữ lịch sử đọc, danh sách yêu thích (bookmark) và đánh giá nội dung.
+Module content:
+
+CRUD content (tin tức, truyện, blog) với chức năng phân trang, tìm kiếm, lọc theo ngày tháng, danh mục, tag.
+Tích hợp caching cho nội dung phổ biến.
+Module bình luận:
+
+Hỗ trợ bình luận, phản hồi đa cấp, đánh giá nội dung (like/dislike hoặc sao).
+Module admin:
+
+Quản lý nội dung: thêm, sửa, xoá, duyệt bài (approval workflow).
+Quản lý người dùng: phân quyền, khóa tài khoản, xử lý báo cáo vi phạm.
+Thống kê & phân tích: Dashboard thống kê lượt truy cập, tương tác, nội dung nổi bật, …
+Audit log và tracking các hành động quan trọng của admin và người dùng.
+Hệ thống phụ trợ và triển khai:
+
+Sử dụng Docker cho môi trường container hóa và cấu hình theo các profile Dev, Staging, Production.
+Tích hợp các công cụ logging (SLF4J, Logback) và monitoring (Prometheus, ELK stack hoặc các giải pháp cloud).
+3. Yêu cầu chức năng
+3.1 Các chức năng cho người dùng (User Features)
+Hiển thị thông tin (Public View):
+
+Content nổi bật theo phân loại, ngày tháng, tag cho khách không đăng nhập.
+Tìm kiếm và lọc nội dung.
+Chức năng đăng nhập và cá nhân hóa:
+
+Đăng ký & Đăng nhập: Xác thực người dùng qua JWT, có cơ chế refresh token.
+Hồ sơ người dùng: Quản lý thông tin cá nhân, ảnh đại diện và cài đặt cá nhân.
+Danh sách yêu thích & Bookmark: Lưu trữ và quản lý các content yêu thích để đọc sau.
+Lịch sử đọc: Ghi nhận các nội dung đã xem để hỗ trợ cá nhân hóa và gợi ý nội dung.
+Bình luận và đánh giá: Cho phép người dùng bình luận, đánh giá (like/dislike hoặc đánh giá theo sao) và trả lời bình luận (nested comment).
+Thông báo (Notifications): Cập nhật thông báo qua in-app, email hoặc push khi có hoạt động như bình luận mới, phản hồi, content liên quan đến sở thích.
+Cá nhân hóa nội dung:
+
+Dựa trên lịch sử đọc và sở thích, hệ thống gợi ý các nội dung phù hợp với người dùng.
+3.2 Các chức năng cho quản trị viên (Admin Features)
+Quản lý nội dung:
+
+Thêm, sửa, xoá nội dung.
+Duyệt bài (approval workflow) trước khi public.
+Phân loại và sắp xếp nội dung theo mức độ ưu tiên hiển thị.
+Quản lý người dùng:
+
+Phân quyền, theo dõi hoạt động và xử lý báo cáo vi phạm.
+Khóa tài khoản hoặc giới hạn quyền truy cập khi cần.
+Báo cáo và thống kê:
+
+Dashboard thống kê lượt truy cập, tương tác, nội dung nổi bật, phân tích theo ngày tháng, danh mục, tag.
+Audit log để theo dõi các hành động của admin và người dùng, hỗ trợ bảo mật và truy vết.
+Quản lý bình luận và báo cáo nội dung:
+
+Phê duyệt, xoá bình luận không phù hợp.
+Quản lý các báo cáo từ người dùng về nội dung vi phạm.
+3.3 Các chức năng hệ thống & kỹ thuật
+Tìm kiếm nâng cao:
+
+Cho phép tìm kiếm theo từ khóa, tag, ngày tháng và phân loại.
+Có thể tích hợp Elasticsearch cho khả năng tìm kiếm mạnh mẽ khi mở rộng hệ thống.
+API Versioning:
+
+Định nghĩa version cho API để đảm bảo tính ổn định và dễ bảo trì khi có cập nhật.
+Caching thông minh:
+
+Sử dụng Redis để cache kết quả tìm kiếm, nội dung phổ biến và các dữ liệu thống kê nhằm giảm tải truy vấn đến database.
+Rate Limiting & Throttling:
+
+Thiết lập giới hạn truy cập API để tránh lạm dụng và bảo vệ hệ thống khỏi các tấn công DDoS.
+Internationalization & Localization:
+
+Hỗ trợ đa ngôn ngữ cho hệ thống, thuận tiện khi mở rộng ra các thị trường khác.
+Error Handling & Logging:
+
+Xây dựng chuẩn cho error response, tích hợp hệ thống logging và monitoring để theo dõi và xử lý lỗi kịp thời.
+Security Enhancements:
+
+Áp dụng JWT với cơ chế refresh token, audit log cho các giao dịch quan trọng.
+Cân nhắc triển khai cơ chế xác thực hai yếu tố (2FA) cho tài khoản admin hoặc người dùng có quyền đặc biệt.
+4. Yêu cầu phi chức năng
+Hiệu năng:
+
+Tối ưu truy vấn database, sử dụng indexing, join và fetch tối ưu.
+Tích hợp cache để giảm tải hệ thống.
+Bảo mật:
+
+Mã hoá mật khẩu (BCrypt hoặc Argon2).
+Kiểm tra và phòng chống CSRF, XSS, SQL Injection.
+Audit log cho các hoạt động quan trọng.
+Khả năng mở rộng:
+
+Thiết kế module theo hướng có thể mở rộng, chuyển đổi sang microservices nếu cần.
+Sử dụng containerization (Docker) và orchestration (Kubernetes) cho môi trường production.
+Độ tin cậy:
+
+Thiết lập hệ thống backup, kế hoạch rollback cho database và ứng dụng khi xảy ra sự cố.
+Khả năng bảo trì:
+
+Áp dụng quy trình code review, chuẩn coding convention và các công cụ kiểm tra code (SonarQube, PMD).
+Tài liệu hóa chi tiết các module, API và các quyết định thiết kế (ADR).
+5. Tính năng mở rộng (Future Enhancements)
+Content Moderation & Reporting:
+
+Cho phép người dùng báo cáo nội dung vi phạm, tích hợp cơ chế moderation tự động (có thể dùng AI) và xử lý báo cáo từ admin.
+Social Integration:
+
+Hỗ trợ đăng nhập qua các mạng xã hội (OAuth 2.0) và tích hợp chức năng chia sẻ nội dung lên các nền tảng xã hội.
+Sự kiện & Khuyến mãi:
+
+Tạo các chương trình sự kiện, khuyến mãi như “content hot tuần”, “thử thách chia sẻ” nhằm tăng tương tác của người dùng.
+Third-party Integrations:
+
+Tích hợp với các dịch vụ bên ngoài như email marketing, hệ thống thanh toán cho nội dung cao cấp hoặc gói đăng ký.
+Phát triển hướng microservices:
+
+Khi số lượng người dùng và dữ liệu tăng mạnh, thiết kế ban đầu theo hướng module sẽ giúp dễ dàng chuyển sang kiến trúc microservices, tích hợp API Gateway, Service Discovery để tối ưu hóa khả năng mở rộng.

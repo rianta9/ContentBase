@@ -9,14 +9,17 @@ import com.ryanlab.contentbase.core.entity.CoreEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
-@Accessors(fluent = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserPreference extends CoreEntity<UserPreference> {
   /**
@@ -36,30 +39,4 @@ public class UserPreference extends CoreEntity<UserPreference> {
   @Column
   LocalDateTime updatedAt;
 
-  @Builder
-  public UserPreference(
-    @NonNull String username, @NonNull String categoryId,
-    String createdBy, String updatedBy,
-    LocalDateTime createdAt, LocalDateTime updatedAt) {
-    super();
-    this.username = username;
-    this.categoryId = categoryId;
-    this.createdBy = createdBy;
-    this.updatedBy = updatedBy;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
-  @Builder
-  public UserPreference(
-    @NonNull String id, @NonNull String username, @NonNull String categoryId,
-    String createdBy,  String updatedBy, LocalDateTime createdAt, LocalDateTime updatedAt) {
-    super(id);
-    this.username = username;
-    this.categoryId = categoryId;
-    this.createdBy = createdBy;
-    this.updatedBy = updatedBy;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
 }

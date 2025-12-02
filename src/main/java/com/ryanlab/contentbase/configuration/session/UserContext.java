@@ -6,11 +6,9 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 @SessionScope
 @Builder
-@Accessors(fluent = true)
 @Data
 public class UserContext {
   private String username;

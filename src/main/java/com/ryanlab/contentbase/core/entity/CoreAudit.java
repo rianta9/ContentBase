@@ -16,7 +16,7 @@ import jakarta.persistence.Embeddable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
 
 /**
  * A core audited entity class
@@ -28,11 +28,11 @@ import lombok.experimental.Accessors;
  * @see
  */
 @Embeddable
-@Accessors(fluent = true)
 @Audited
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @Getter
+@Setter
 public class CoreAudit implements ICoreEntityAudit {
 
   /**

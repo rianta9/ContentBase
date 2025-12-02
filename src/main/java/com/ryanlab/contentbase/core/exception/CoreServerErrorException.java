@@ -11,7 +11,6 @@ import com.ryanlab.contentbase.core.api.ResponseMessageId;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 /**
  * Core ServerErrorException
@@ -22,7 +21,6 @@ import lombok.experimental.Accessors;
  * @version 1.0
  * @see
  */
-@Accessors(fluent = true)
 @Getter
 @Setter
 public class CoreServerErrorException extends CoreErrorException {

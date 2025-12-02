@@ -1,6 +1,5 @@
 package com.ryanlab.contentbase.model.entity;
 
-
 import com.ryanlab.contentbase.core.api.MessagePattern;
 import com.ryanlab.contentbase.core.entity.CoreEntity;
 
@@ -8,15 +7,17 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@Accessors(fluent = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class ResponseMessage extends CoreEntity<ResponseMessage> {
 

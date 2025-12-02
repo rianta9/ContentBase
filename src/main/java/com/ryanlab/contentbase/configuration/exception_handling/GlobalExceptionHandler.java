@@ -68,10 +68,10 @@ public class GlobalExceptionHandler {
     MessageToUser message = getMessage(messageId, summaryArgs, detailArgs);
     ApiResponse response =
       ApiResponse.builder()
-                 .code(message.statusCode())
+                 .code(message.getStatusCode())
                  .body(getMessage(messageId, summaryArgs, detailArgs))
                  .build();
-    return ResponseEntity.status(message.statusCode()).body(response);
+    return ResponseEntity.status(message.getStatusCode()).body(response);
   }
 
   /**
@@ -89,10 +89,10 @@ public class GlobalExceptionHandler {
     MessageToUser message = getMessage(messageId, summaryArgs, detailArgs);
     ApiResponse response =
       ApiResponse.builder()
-                 .code(message.statusCode())
+                 .code(message.getStatusCode())
                  .body(getMessage(messageId, summaryArgs, detailArgs))
                  .build();
-    return ResponseEntity.status(message.statusCode()).body(response);
+    return ResponseEntity.status(message.getStatusCode()).body(response);
   }
 
   private MessageToUser getMessage(ResponseMessageId messageId,
@@ -107,13 +107,14 @@ public class GlobalExceptionHandler {
     }
     return MessageToUser.builder()
                         .responseType(
-                          ResponseType.toEnum(message.responseType()))
-                        .statusCode(message.statusCode())
+                          ResponseType.toEnum(message.getResponseType()))
+                        .statusCode(message.getStatusCode())
                         .messageSummary(
-                          message.summaryMessagePattern()
+                          message.getSummaryMessagePattern()
                                  .toMessage(summaryArgs))
                         .messageDetail(
-                          message.detailMessagePattern().toMessage(detailArgs))
+                          message.getDetailMessagePattern()
+                                 .toMessage(detailArgs))
                         .build();
 
   }

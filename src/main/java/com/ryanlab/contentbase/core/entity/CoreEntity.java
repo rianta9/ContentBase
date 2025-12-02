@@ -1,6 +1,5 @@
 package com.ryanlab.contentbase.core.entity;
 
-
 import org.springframework.util.Assert;
 
 import jakarta.persistence.GeneratedValue;
@@ -9,11 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
 
-@Accessors(fluent = true)
 @MappedSuperclass
 @Getter
+@Setter
 @NoArgsConstructor
 public class CoreEntity<E extends ICoreEntity<E>> implements ICoreEntity<E> {
 
@@ -27,7 +26,6 @@ public class CoreEntity<E extends ICoreEntity<E>> implements ICoreEntity<E> {
   private String id;
 
   public CoreEntity(String id) {
-    Assert.notNull(id, "id must not be null");
     this.id = id;
   }
 

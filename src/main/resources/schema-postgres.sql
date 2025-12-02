@@ -5,7 +5,7 @@ create table if not exists private.revinfo(
 );
 
 
-create table if not exists private.account(
+create table if not exists private.users(
 	id varchar(255) not null,
 	username varchar(255) not null,
 	password varchar(255) not null,
@@ -23,13 +23,13 @@ create table if not exists private.account(
 	created_by varchar(255),
 	updated_at timestamp,
 	updated_by varchar(255),
-	constraint PK_account primary key (id),
-	constraint account_uk1 unique (username),
-	constraint account_uk2 unique (email),
-	constraint account_uk3 unique (phone)
+	constraint PK_users primary key (id),
+	constraint users_uk1 unique (username),
+	constraint users_uk2 unique (email),
+	constraint users_uk3 unique (phone)
 );
 
-create table if not exists private.account_aud(
+create table if not exists private.users_aud(
 	rev integer not null,
 	revtype integer not null,
 	id varchar(255) not null,
@@ -48,8 +48,8 @@ create table if not exists private.account_aud(
 	created_by varchar(255),
 	updated_at timestamp,
 	updated_by varchar(255),
-	constraint PK_account_aud primary key (rev, id),
-	constraint FK_account_aud foreign key (rev) references private.revinfo
+	constraint PK_users_aud primary key (rev, id),
+	constraint FK_users_aud foreign key (rev) references private.revinfo
 );
 
 create table if not exists private.title(
@@ -111,7 +111,7 @@ create table if not exists private.user_activity_aud(
 create table if not exists private.user_favourite(
     id varchar(255) not null,
     username varchar(255) not null,
-    story_id varchar(255) not null,
+    article_id varchar(255) not null,
     favourite_status boolean,
     version int not null,
     created_at timestamp,
@@ -119,7 +119,7 @@ create table if not exists private.user_favourite(
     updated_at timestamp,
     updated_by varchar(255),
     constraint PK_user_favourite primary key (id),
-    constraint UK1_user_favourite unique (username, story_id)
+    constraint UK1_user_favourite unique (username, article_id)
 );
 
 create table if not exists private.user_favourite_aud(
@@ -127,7 +127,7 @@ create table if not exists private.user_favourite_aud(
     revtype integer not null,
     id varchar(255) not null,
     username varchar(255),
-    story_id varchar(255),
+    article_id varchar(255),
     favourite_status boolean,
     created_at timestamp,
     created_by varchar(255),
@@ -163,59 +163,9 @@ create table if not exists private.user_permission_aud(
     constraint PK_user_permission_aud primary key (rev, id),
     constraint FK_user_permission_aud foreign key (rev) references private.revinfo
 );
-create table if not exists private.user_permission(
-    id varchar(255) not null,
-    username varchar(255) not null,
-    permission_code varchar(255) not null,
-    version int not null,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_permission primary key (id),
-    constraint UK1_user_permission unique (username, permission_code)
-);
 
-create table if not exists private.user_permission_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    permission_code varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_permission_aud primary key (rev, id),
-    constraint FK_user_permission_aud foreign key (rev) references private.revinfo
-);
 
-create table if not exists private.user_title(
-    id varchar(255) not null,
-    username varchar(255) not null,
-    title_code varchar(255) not null,
-    version int not null,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_title primary key (id),
-    constraint UK1_user_title unique (username, title_code)
-);
 
-create table if not exists private.user_title_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    title_code varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_title_aud primary key (rev, id),
-    constraint FK_user_title_aud foreign key (rev) references private.revinfo
-);
 
 create table if not exists private.user_setting(
     id varchar(255) not null,
@@ -277,96 +227,17 @@ create table if not exists private.user_notification_aud(
     constraint FK_user_notification_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.author_subscription(
-    id varchar(255) not null,
-    username varchar(255) not null,
-    author_id varchar(255) not null,
-    send_to_mail boolean,
-    version int not null,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_author_subscription primary key (id),
-    constraint UK1_author_subscription unique (username, author_id)
-);
 
-create table if not exists private.author_subscription_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    author_id varchar(255),
-    send_to_mail boolean,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_author_subscription_aud primary key (rev, id),
-    constraint FK_author_subscription_aud foreign key (rev) references private.revinfo
-);
 
-create table if not exists private.user_wallet(
-    id varchar(255) not null,
-    username varchar(255) not null,
-    money decimal,
-    point integer,
-    version int not null,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_wallet primary key (id)
-);
 
-create table if not exists private.user_wallet_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    money decimal,
-    point integer,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_wallet_aud primary key (rev, id),
-    constraint FK_user_wallet_aud foreign key (rev) references private.revinfo
-);
 
-create table if not exists private.user_badge(
-    id varchar(255) not null,
-    username varchar(255) not null,
-    archieve_date timestamp,
-    archievement varchar(255),
-    version int not null,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_badge primary key (id)
-);
 
-create table if not exists private.user_badge_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    archieve_date timestamp,
-    archievement varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_user_badge_aud primary key (rev, id),
-    constraint FK_user_badge_aud foreign key (rev) references private.revinfo
-);
 
 create table if not exists private.comment(
 	id varchar(255) not null,
 	content text null,
 	parents_comment_id varchar(255) null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	username varchar(255) not null,
 	created_at timestamp,
 	created_by varchar(255),
@@ -381,7 +252,7 @@ create table if not exists private.comment_aud(
 	id varchar(255) not null,
 	content text,
 	parents_comment_id varchar(255),
-	story_id varchar(255),
+	article_id varchar(255),
 	username varchar(255),
 	created_at timestamp,
 	created_by varchar(255),
@@ -396,7 +267,7 @@ create table if not exists private.review(
 	title varchar(255) not null,
 	content text not null,
 	point float not null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	username varchar(255) not null,
 	version int not null,
 	created_at timestamp,
@@ -404,7 +275,7 @@ create table if not exists private.review(
 	last_updated_date timestamp,
 	last_updated_by varchar(255),
 	constraint PK_review primary key (id),
-	constraint review_uk1 unique (story_id, username)
+	constraint review_uk1 unique (article_id, username)
 );
 
 create table if not exists private.review_aud(
@@ -414,7 +285,7 @@ create table if not exists private.review_aud(
 	title varchar(255),
 	content text,
 	point float,
-	story_id varchar(255),
+	article_id varchar(255),
 	username varchar(255),
 	created_at timestamp,
 	created_by varchar(255),
@@ -440,79 +311,51 @@ create table if not exists private.status(
 	constraint status_uk1 unique (status_name)
 );
 
-create table if not exists private.story_statistic(
+create table if not exists private.article_statistic(
 	id varchar(255) not null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	average_point float not null,
 	number_of_reviews bigint not null,
 	number_of_views bigint not null,
 	number_of_follows bigint not null,
 	number_of_favourites bigint not null,
-	constraint PK_story_statistic primary key (id),
-	constraint story_statistic_uk1 unique (story_id)
+	constraint PK_article_statistic primary key (id),
+	constraint article_statistic_uk1 unique (article_id)
 );
 
-create table if not exists private.story_statistic_aud(
+create table if not exists private.article_statistic_aud(
 	rev integer not null,
 	revtype integer not null,
 	id varchar(255) not null,
-	story_id varchar(255),
+	article_id varchar(255),
 	average_point float,
 	number_of_reviews bigint,
 	number_of_views bigint,
 	number_of_follows bigint,
 	number_of_favourites bigint,
-	constraint PK_story_statistic_aud primary key (rev, id),
-	constraint FK_story_statistic_aud foreign key (rev) references private.revinfo
+	constraint PK_article_statistic_aud primary key (rev, id),
+	constraint FK_article_statistic_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.story_tag(
+create table if not exists private.article_tag(
 	id varchar(255) not null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	tag varchar(255) not null,
-	constraint PK_story_tag primary key (id),
-	constraint story_tag_uk1 unique (story_id, tag)
+	constraint PK_article_tag primary key (id),
+	constraint article_tag_uk1 unique (article_id, tag)
 );	
 
-create table if not exists private.story_tag_aud(
+create table if not exists private.article_tag_aud(
 	rev integer not null,
 	revtype integer not null,
 	id varchar(255) not null,
-	story_id varchar(255),
+	article_id varchar(255),
 	tag varchar(255),
-	constraint PK_story_tag_aud primary key (rev, id),
-	constraint FK_story_tag_aud foreign key (rev) references private.revinfo
+	constraint PK_article_tag_aud primary key (rev, id),
+	constraint FK_article_tag_aud foreign key (rev) references private.revinfo
 );	
 
-create table if not exists private.reading_progress(
-	id varchar(255) not null,
-	user_id varchar(255) not null,
-	story_id varchar(255) not null,
-	chapter_id varchar(255) not null,
-	last_view_at timestamp not null,
-	version int not null,
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_user_reading_progress primary key (id)
-);
 
-create table if not exists private.reading_progress_aud(
-	rev integer not null,
-	revtype integer not null,
-	id varchar(255) not null,
-	user_id varchar(255),
-	story_id varchar(255),
-	chapter_id varchar(255),
-	last_view_at timestamp,
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_reading_progress_aud primary key (rev, id),
-	constraint FK_reading_progress_aud foreign key (rev) references private.revinfo
-);
 
 create table if not exists private.activity_type(
 	id varchar(255) not null,
@@ -628,35 +471,7 @@ create table if not exists private.report_type_aud (
 	constraint FK_report_type_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.chapter_report (
-	id varchar(255) not null,
-	report_type varchar(255) not null,
-	username varchar(255) not null,
-	title varchar(255) not null,
-	content text,
-	version integer not null,
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_chapter_report primary key (id)
-);
 
-create table if not exists private.chapter_report_aud (
-	rev integer not null,
-	revtype integer not null,
-	id varchar(255) not null,
-	report_type varchar(255),
-	username varchar(255),
-	title varchar(255),
-	content text,
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_chapter_report_aud primary key (rev, id),
-	constraint FK_chapter_report_aud foreign key (rev) references private.revinfo
-);
 
 create table if not exists private.event (
 	id varchar(255) not null,
@@ -807,159 +622,9 @@ create table if not exists private.guideline_aud(
     constraint FK_guideline_aud foreign key (rev) references private.revinfo
 );
 
-CREATE TABLE IF NOT EXISTS private.level (
-    id VARCHAR(255) NOT NULL,
-    level_id VARCHAR(255) NOT NULL,
-    level_name VARCHAR(255) NOT NULL,
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_level PRIMARY KEY (id),
-    CONSTRAINT UK1_level UNIQUE (level_id),
-    CONSTRAINT UK2_level UNIQUE (level_name)
-);
 
-create table if not exists private.level_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    level_id varchar(255),
-    level_name varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_level_aud primary key (rev, id),
-    constraint FK_level_aud foreign key (rev) references private.revinfo
-);
 
-CREATE TABLE IF NOT EXISTS private.payment_history (
-    id VARCHAR(255) NOT NULL,
-    username VARCHAR(255),
-    payment_method VARCHAR(255),
-    discount_code VARCHAR(255),
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_payment_history PRIMARY KEY (id)
-);
 
-create table if not exists private.payment_history_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    username varchar(255),
-    payment_method varchar(255),
-    discount_code varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_payment_history_aud primary key (rev, id),
-    constraint FK_payment_history_aud foreign key (rev) references private.revinfo
-);
-
-CREATE TABLE IF NOT EXISTS private.payment_history_detail (
-    id VARCHAR(255) NOT NULL,
-    history_id VARCHAR(255),
-    story_id VARCHAR(255),
-    current_price DECIMAL(19,4),
-    cost DECIMAL(19,4),
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_payment_history_detail PRIMARY KEY (id),
-    CONSTRAINT UK1_payment_history_detail UNIQUE (history_id, story_id)
-);
-
-create table if not exists private.payment_history_detail_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    history_id varchar(255),
-    story_id varchar(255),
-    current_price decimal(19,4),
-    cost decimal(19,4),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_payment_history_detail_aud primary key (rev, id),
-    constraint FK_payment_history_detail_aud foreign key (rev) references private.revinfo
-);
-
-CREATE TABLE IF NOT EXISTS private.payment_method (
-    id VARCHAR(255) NOT NULL,
-    payment_method VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_payment_method PRIMARY KEY (id),
-    CONSTRAINT UK1_payment_method UNIQUE (payment_method),
-    CONSTRAINT UK2_payment_method UNIQUE (name)
-);
-
-create table if not exists private.payment_method_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    payment_method varchar(255),
-    name varchar(255),
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_payment_method_aud primary key (rev, id),
-    constraint FK_payment_method_aud foreign key (rev) references private.revinfo
-);
-
-CREATE TABLE IF NOT EXISTS private.discount_code (
-    id VARCHAR(255) NOT NULL,
-    discount_code VARCHAR(255) NOT NULL,
-    discount_name VARCHAR(255),
-    avatar_file_id VARCHAR(255),
-    description VARCHAR(255),
-    specified_payment_method VARCHAR(255),
-    specified_story_id VARCHAR(255),
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_discount_code PRIMARY KEY (id),
-    CONSTRAINT UK1_discount_code UNIQUE (discount_code)
-);
-
-create table if not exists private.discount_code_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    discount_code varchar(255),
-    discount_name varchar(255),
-    avatar_file_id varchar(255),
-    description varchar(255),
-    specified_payment_method varchar(255),
-    specified_story_id varchar(255),
-    start_date timestamp,
-    end_date timestamp,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_discount_code_aud primary key (rev, id),
-    constraint FK_discount_code_aud foreign key (rev) references private.revinfo
-);
 
 CREATE TABLE IF NOT EXISTS private.permission (
     id VARCHAR(255) NOT NULL,
@@ -989,107 +654,51 @@ create table if not exists private.permission_aud(
     constraint FK_permission_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.story(
+create table if not exists private.article(
 	id varchar(255) not null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	title varchar(255) not null,
+	slug varchar(255) not null,
 	author_id varchar(255) not null,
 	avatar_file_id varchar(255) not null,
-	description text not null,
-	chapter_range varchar(255) not null,
-	total_chapters varchar(255) not null,
+	summary text not null,
+	content text not null,
 	status_code varchar(255) not null,
+	published_at timestamp,
 	version int not null,
 	created_at timestamp,
 	created_by varchar(255),
 	updated_at timestamp,
 	updated_by varchar(255),
-	constraint PK_story primary key (id),
-	constraint story_uk1 unique (story_id)
+	constraint PK_article primary key (id),
+	constraint article_uk1 unique (article_id),
+	constraint article_uk2 unique (slug)
 );
 
-create table if not exists private.story_aud(
+create table if not exists private.article_aud(
 	rev integer not null,
 	revtype integer not null,
 	id varchar(255) not null,
-	story_id varchar(255),
+	article_id varchar(255),
 	title varchar(255),
+	slug varchar(255),
 	author_id varchar(255),
 	avatar_file_id varchar(255),
-	description text,
-	chapter_range varchar(255),
-	total_chapters varchar(255),
+	summary text,
+	content text,
 	status_code varchar(255),
+	published_at timestamp,
 	created_at timestamp,
 	created_by varchar(255),
 	updated_at timestamp,
 	updated_by varchar(255),
-	constraint PK_story_aud primary key (rev, id),
-	constraint FK_story_aud foreign key (rev) references private.revinfo
+	constraint PK_article_aud primary key (rev, id),
+	constraint FK_article_aud foreign key (rev) references private.revinfo
 );
 
-CREATE TABLE IF NOT EXISTS private.story_donate (
+create table if not exists private.article_report (
     id VARCHAR(255) NOT NULL,
-    story_id VARCHAR(255),
-    username VARCHAR(255),
-    donate_point VARCHAR(255),
-    content TEXT,
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_story_donate PRIMARY KEY (id)
-);
-
-create table if not exists private.story_donate_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    story_id varchar(255),
-    username varchar(255),
-    donate_point varchar(255),
-    content text,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_story_donate_aud primary key (rev, id),
-    constraint FK_story_donate_aud foreign key (rev) references private.revinfo
-);
-
-CREATE TABLE IF NOT EXISTS private.story_subscription (
-    id VARCHAR(255) NOT NULL,
-    story_id VARCHAR(255),
-    username VARCHAR(255),
-    send_to_mail BOOLEAN,
-    version INT NOT NULL,
-    created_at TIMESTAMP,
-    created_by VARCHAR(255),
-    updated_at TIMESTAMP,
-    updated_by VARCHAR(255),
-    CONSTRAINT PK_story_subscription PRIMARY KEY (id),
-    CONSTRAINT UK1_story_subscription UNIQUE (story_id, username)
-);
-
-create table if not exists private.story_subscription_aud(
-    rev integer not null,
-    revtype integer not null,
-    id varchar(255) not null,
-    story_id varchar(255),
-    username varchar(255),
-    send_to_mail boolean,
-    created_at timestamp,
-    created_by varchar(255),
-    updated_at timestamp,
-    updated_by varchar(255),
-    constraint PK_story_subscription_aud primary key (rev, id),
-    constraint FK_story_subscription_aud foreign key (rev) references private.revinfo
-);
-
-CREATE TABLE IF NOT EXISTS private.story_report (
-    id VARCHAR(255) NOT NULL,
-    story_id VARCHAR(255),
+    article_id VARCHAR(255),
     report_type VARCHAR(255),
     username VARCHAR(255),
     title VARCHAR,
@@ -1099,14 +708,14 @@ CREATE TABLE IF NOT EXISTS private.story_report (
     created_by VARCHAR(255),
     updated_at TIMESTAMP,
     updated_by VARCHAR(255),
-    CONSTRAINT PK_story_report PRIMARY KEY (id)
+    CONSTRAINT PK_article_report PRIMARY KEY (id)
 );
 
-create table if not exists private.story_report_aud(
+create table if not exists private.article_report_aud(
     rev integer not null,
     revtype integer not null,
     id varchar(255) not null,
-    story_id varchar(255),
+    article_id varchar(255),
     report_type varchar(255),
     username varchar(255),
     title varchar(255),
@@ -1115,8 +724,8 @@ create table if not exists private.story_report_aud(
     created_by varchar(255),
     updated_at timestamp,
     updated_by varchar(255),
-    constraint PK_story_report_aud primary key (rev, id),
-    constraint FK_story_report_aud foreign key (rev) references private.revinfo
+    constraint PK_article_report_aud primary key (rev, id),
+    constraint FK_article_report_aud foreign key (rev) references private.revinfo
 );
 
 
@@ -1183,59 +792,25 @@ create table if not exists private.category_aud(
 	constraint FK_category_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.story_category(
+create table if not exists private.article_category(
 	id varchar(255) not null,
-	story_id varchar(255) not null,
+	article_id varchar(255) not null,
 	category_code varchar(255) not null,
-	constraint PK_story_category primary key (id),
-	constraint story_category_uk1 unique (story_id, category_code)
+	constraint PK_article_category primary key (id),
+	constraint article_category_uk1 unique (article_id, category_code)
 );
 
-create table if not exists private.story_category_aud(
+create table if not exists private.article_category_aud(
 	rev integer not null,
 	revtype integer not null,
 	id varchar(255) not null,
-	story_id varchar(255),
+	article_id varchar(255),
 	category_code varchar(255),
-	constraint PK_story_category_aud primary key (rev, id),
-	constraint FK_story_category_aud foreign key (rev) references private.revinfo
+	constraint PK_article_category_aud primary key (rev, id),
+	constraint FK_article_category_aud foreign key (rev) references private.revinfo
 );
 
-create table if not exists private.chapter(
-	id varchar(255) not null,
-	chapter_id varchar(255) not null,
-	chapter_name varchar(255) not null,
-	chapter_content text not null,
-	chapter_index int not null,
-	status_code varchar(255) not null,
-	story_id varchar(255) not null,
-	version int not null,
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_chapter primary key (id),
-	constraint chapter_uk1 unique (story_id, chapter_index),
-	constraint chapter_uk2 unique (story_id, chapter_id)
-);
 
-create table if not exists private.chapter_aud(
-	rev integer not null,
-	revtype integer not null,
-	id varchar(255) not null,
-	chapter_id varchar(255),
-	chapter_name varchar(255),
-	chapter_content text,
-	chapter_index int,
-	status_code varchar(255),
-	story_id varchar(255),
-	created_at timestamp,
-	created_by varchar(255),
-	updated_at timestamp,
-	updated_by varchar(255),
-	constraint PK_chapter_aud primary key (rev, id),
-	constraint FK_chapter_aud foreign key (rev) references private.revinfo
-);
 
 
 create table if not exists private.api_response_message(

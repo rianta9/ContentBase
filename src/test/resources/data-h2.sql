@@ -1,0 +1,3 @@
+-- H2 Test Database Schemas
+CREATE SCHEMA IF NOT EXISTS public;
+CREATE SCHEMA IF NOT EXISTS private;

@@ -1,18 +1,19 @@
 package com.ryanlab.contentbase.core.entity;
 
-
+import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.Assert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
 
 /**
  * A core audited entity class
@@ -23,10 +24,10 @@ import lombok.experimental.Accessors;
  * @version 1.0
  * @see
  */
-@Accessors(fluent = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @NoArgsConstructor
 public class CoreAuditedEntity<E extends ICoreEntity<E>> extends CoreEntity<E> {
 
@@ -39,8 +40,20 @@ public class CoreAuditedEntity<E extends ICoreEntity<E>> extends CoreEntity<E> {
   @Version
   private Integer version = 0;
 
-  @Embedded
-  private CoreAudit audit;
+  @Column(name = "created_by")
+  private String createdBy;
+
+  @Column(name = "updated_by")
+  private String updatedBy;
+
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
+
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
+
+  // @Embedded - Audit fields are now mapped as separate columns above
+  // private CoreAudit audit;
 
   /**
    * Constructor of CoreAditedEntity
@@ -51,10 +64,35 @@ public class CoreAuditedEntity<E extends ICoreEntity<E>> extends CoreEntity<E> {
    */
   public CoreAuditedEntity(String id, Integer version, CoreAudit audit) {
     super(id);
-    Assert.notNull(version, () -> "version must not be null.");
-    Assert.notNull(audit, () -> "audit must not be null.");
+    if (audit != null) {
+      this.version = version != null ? version : 0;
+      this.createdBy = audit.getCreatedBy();
+      this.updatedBy = audit.getUpdatedBy();
+      this.createdAt = audit.getCreatedAt();
+      this.updatedAt = audit.getUpdatedAt();
+    }
+  }
+
+  /**
+   * Constructor of CoreAuditedEntity
+   * 
+   * @param id
+   * @param version
+   * @param createdBy
+   * @param updatedBy
+   * @param createdAt
+   * @param updatedAt
+   */
+  public CoreAuditedEntity(
+    String id, Integer version, String createdBy, String updatedBy,
+    LocalDateTime createdAt, LocalDateTime updatedAt) {
+    super(id);
     this.version = version;
-    this.audit = audit;
+    this.createdBy = createdBy;
+    this.updatedBy = updatedBy;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.audit = new CoreAudit(createdAt, createdBy, updatedAt, updatedBy);
   }
 
 }
