@@ -13,6 +13,7 @@ import com.ryanlab.contentbase.core.api.MessagePattern;
 import com.ryanlab.contentbase.core.api.MessageToUser;
 import com.ryanlab.contentbase.core.api.ResponseMessageId;
 import com.ryanlab.contentbase.core.api.ResponseType;
+import com.ryanlab.contentbase.core.exception.ResourceNotFoundException;
 import com.ryanlab.contentbase.model.entity.ResponseMessage;
 import com.ryanlab.contentbase.repository.jpa.ResponseMessageJpaRepository;
 
@@ -93,6 +94,29 @@ public class GlobalExceptionHandler {
                  .body(getMessage(messageId, summaryArgs, detailArgs))
                  .build();
     return ResponseEntity.status(message.getStatusCode()).body(response);
+  }
+
+  /**
+   * Handle ResourceNotFoundException
+   * 
+   * @param exception
+   * @return
+   */
+  @ExceptionHandler(value = ResourceNotFoundException.class)
+  ResponseEntity<ApiResponse> handleResourceNotFoundException(
+    ResourceNotFoundException exception) {
+    log.warn("Resource not found: {}", exception.getMessage());
+    ApiResponse response =
+      ApiResponse.builder()
+                 .code(HttpStatus.NOT_FOUND.value())
+                 .body(
+                   MessageToUser.builder()
+                                .statusCode(HttpStatus.NOT_FOUND.value())
+                                .messageSummary("Resource not found")
+                                .messageDetail(exception.getMessage())
+                                .build())
+                 .build();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
   private MessageToUser getMessage(ResponseMessageId messageId,

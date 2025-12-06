@@ -92,7 +92,6 @@ public class CoreAuditedEntity<E extends ICoreEntity<E>> extends CoreEntity<E> {
     this.updatedBy = updatedBy;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.audit = new CoreAudit(createdAt, createdBy, updatedAt, updatedBy);
   }
 
 }

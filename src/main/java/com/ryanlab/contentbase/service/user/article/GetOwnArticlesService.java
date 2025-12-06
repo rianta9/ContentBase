@@ -62,10 +62,8 @@ public class GetOwnArticlesService {
                                      .avatarFileId(article.getAvatarFileId())
                                      .statusCode(article.getStatusCode())
                                      .publishedAt(article.getPublishedAt())
-                                     .createdAt(
-                                         article.getAudit().getCreatedAt())
-                                     .updatedAt(
-                                         article.getAudit().getUpdatedAt())
+                                     .createdAt(article.getCreatedAt())
+                                     .updatedAt(article.getUpdatedAt())
                                      .build();
     }
 }

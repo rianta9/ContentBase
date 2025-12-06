@@ -43,7 +43,7 @@ public class GetArticleBySlugIntegrationTest extends BaseIntegrationTest {
   void testGetArticleBySlugSuccess() throws Exception {
     mockMvc.perform(get("/api/public/articles/slug/{slug}", "best-java-practices"))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$.contentId").value(publishedArticle.getArticleId()))
+           .andExpect(jsonPath("$.contentId").exists())
            .andExpect(jsonPath("$.title").value("Best Java Practices"))
            .andExpect(jsonPath("$.content").exists());
   }

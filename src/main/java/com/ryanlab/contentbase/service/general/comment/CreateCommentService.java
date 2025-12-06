@@ -80,8 +80,8 @@ public class CreateCommentService {
                           .parentsCommentId(comment.getParentsCommentId())
                           .username(comment.getUsername())
                           .content(comment.getContent())
-                          .createdAt(comment.getAudit() != null ? comment.getAudit().getCreatedAt() : null)
-                          .updatedAt(comment.getAudit() != null ? comment.getAudit().getUpdatedAt() : null)
+                          .createdAt(comment.getCreatedAt())
+                          .updatedAt(comment.getUpdatedAt())
                           .build();
   }
 }
